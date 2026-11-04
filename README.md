@@ -49,16 +49,18 @@ Service logs go to the journal: `journalctl -u trustvault-backup`.
 
 ## Setup
 
-Do steps 1–3 on **both** machines.
+Do steps 1–5 on **both** machines.
 
-1. `sudo ./trustvault.sh configure` asks for the share, the ZeroTier Network ID, ports and schedule. It generates the encryption key and shows a **recovery sheet**. Store the sheet off the machine (print it or put it in a password manager), then delete `/root/trustvault-RECOVERY.txt`.
-2. `sudo ./trustvault.sh apply` installs and configures everything and prints how to connect to the share. It offers to set a Samba password for any share user who doesn't have one. It's safe to re-run, and `--dry-run` shows what it would do without changing anything.
-3. The ZeroTier network owner authorizes this machine's node ID (printed by `apply`) at my.zerotier.com. Then run `sudo trustvault apply` again so it picks up the ZeroTier interface and adds the firewall rules.
+1. `wget <https://raw.githubusercontent.com/crashputer/TrustVault/refs/heads/main/trustvault.sh>`
+2. `chmod +x trustvault.sh`
+3. `sudo ./trustvault.sh configure` asks for the share, the ZeroTier Network ID, ports and schedule. It generates the encryption key and shows a **recovery sheet**. Store the sheet off the machine (print it or put it in a password manager), then delete `/root/trustvault-RECOVERY.txt`.
+4. `sudo ./trustvault.sh apply` installs and configures everything and prints how to connect to the share. It offers to set a Samba password for any share user who doesn't have one. It's safe to re-run, and `--dry-run` shows what it would do without changing anything.
+5. The ZeroTier network owner authorizes this machine's node ID (printed by `apply`) at my.zerotier.com. Then run `sudo trustvault apply` again so it picks up the ZeroTier interface and adds the firewall rules.
 
 Then pair the two machines:
 
-4. On each machine, run `sudo trustvault pairing-info` and send the output to the other person **privately**, for example in person, by phone, or through a password manager.
-5. On each machine, run `sudo trustvault set-peer` and enter what the other person sent. It offers to run `apply`, which initializes the encrypted repository on the peer and enables the backup timer.
+6. On each machine, run `sudo trustvault pairing-info` and send the output to the other person **privately**, for example in person, by phone, or through a password manager.
+7. On each machine, run `sudo trustvault set-peer` and enter what the other person sent. It offers to run `apply`, which initializes the encrypted repository on the peer and enables the backup timer.
 
 ## Connecting to the share
 
