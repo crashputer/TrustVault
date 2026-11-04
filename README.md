@@ -1,10 +1,20 @@
-# TrustVault (draft)
+# TrustVault
 
-Two Linux machines at different sites. Each one serves a shared folder to its local network and sends an encrypted backup of that folder to the other over ZeroTier. Neither owner can read the other's backups, and neither machine can delete or alter backups it has already sent.
+This project uses two Debian-based Linux machines at different sites. Each one serves a shared folder to its local network to be used as a standard NAS and sends an encrypted backup of that folder to the other over ZeroTier. Neither owner can read the other's backups, and neither machine can delete or alter backups it has already sent.
 
-**Status:** first draft. Test it on two VMs or spare machines before using it on real data.
+**Status:** This script is an early draft. Test it on two VMs or spare machines before using it on real data.
 
-## Before you start: ZeroTier account required
+## Prerequisites
+
+### A Debian-based Linux installation
+
+> This script is designed to run on a Debian-based Linux installation that uses systemd (Debian, Ubuntu, Mint, etc). Use a non-root user account with sudo. This user account will also be the user of the smb share created during installation.
+
+### Internet Access
+
+> Internet access is required during installation. TrustVault downloads restic and rest-server from GitHub and checks their SHA256 checksums.
+
+### ZeroTier
 
 > **TrustVault cannot create a ZeroTier account or network for you. One of the two people must do this first, outside TrustVault.**
 >
@@ -16,19 +26,13 @@ Two Linux machines at different sites. Each one serves a shared folder to its lo
 
 TrustVault installs the ZeroTier software itself if it's missing, using ZeroTier's official installer (`curl https://install.zerotier.com | bash`). If you'd rather install it another way, do that first and TrustVault will use the existing installation.
 
-## Other requirements
-
-* Linux Mint, Debian or Ubuntu with systemd.
-* Internet access during install. TrustVault downloads restic and rest-server from GitHub and checks their SHA256 checksums.
-* The Linux user accounts that will use the share must already exist on the machine.
-
 ## How it works
 
 On each machine, three things run.
 
 The **network share** is a Samba share defined in its own file, `/etc/samba/trustvault.conf`, and pulled in with a single `include` line appended to `smb.conf`. Existing shares and settings are not touched.
 
-The **sender** is restic, run by a systemd timer as an unprivileged `trustvault` user. It reads the share using the `CAP_DAC_READ_SEARCH` capability rather than running as root. Backups are encrypted on the machine before they leave it.
+The **sender** is restic, run by a systemd timer as an unprivileged `trustvault` user. It reads the share using the `CAP_DAC_READ_SEARCH` capability rather than running as root. Backups are encrypted on the local machine before being transmitted.
 
 The **receiver** is rest-server, run as a separate `trustvault-recv` user. It listens only on the ZeroTier address and runs with `--append-only` and `--private-repos`, so the peer can add new snapshots but cannot delete or overwrite old ones, and can only see its own repository.
 
