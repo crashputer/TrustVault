@@ -129,7 +129,7 @@ The sheet contains the exact commands to run. For a full rebuild, the simplest r
 Your shared files and the peer's backups are never deleted automatically.
 
 ## Known limitations and next steps
-* **If this is running in a Proxmox LXC, after the container is created, run the following command on the server's console with the container stopped: `ptc set <CTID> -dev0 /dev/net/run`
+* **If this is running in a Proxmox LXC, after the container is created, run the following command on the server's console with the container stopped: `ptc set <CTID> -dev0 /dev/net/tun`
 * **Plain HTTP over ZeroTier.** Traffic is encrypted by ZeroTier, and the backup data itself is encrypted by restic, but rest-server is not set up with TLS.
 * **The share is not limited to the local network.** Samba listens on all interfaces, including ZeroTier. A password is still required to connect, but if no firewall is active, the peer could attempt to reach your share over ZeroTier. Restricting Samba to local subnets is a planned improvement.
 * **`apply` must be re-run after editing the config file.** Changing `RECV_PORT` while firewall rules exist leaves the old rules behind; run `uninstall`, then `apply` in that case.
