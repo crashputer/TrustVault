@@ -51,7 +51,7 @@ Service logs go to the journal: `journalctl -u trustvault-backup`.
 
 Do steps 1–5 on **both** machines.
 
-1. `wget <https://raw.githubusercontent.com/crashputer/TrustVault/refs/heads/main/trustvault.sh>`
+1. `wget https://raw.githubusercontent.com/crashputer/TrustVault/refs/heads/main/trustvault.sh`
 2. `chmod +x trustvault.sh`
 3. `sudo ./trustvault.sh configure` asks for the share, the ZeroTier Network ID, ports and schedule. It generates the encryption key and shows a **recovery sheet**. Store the sheet off the machine (print it or put it in a password manager), then delete `/root/trustvault-RECOVERY.txt`.
 4. `sudo ./trustvault.sh apply` installs and configures everything and prints how to connect to the share. It offers to set a Samba password for any share user who doesn't have one. It's safe to re-run, and `--dry-run` shows what it would do without changing anything.
